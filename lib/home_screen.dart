@@ -133,10 +133,29 @@ class HomeScreen extends ConsumerWidget {
           ),
 
           Consumer(
-            
+            builder: (context, ref, child) {
+              print("container Icon");
+              final sliderValue = ref.watch(sliderProvider.select((state)=>state.showPassword));
+              return InkWell(
+                onTap: () {
+                  final appStateProvider=ref.read(sliderProvider.notifier);
+                  appStateProvider.state=appStateProvider.state.copyWith(showPassword: !sliderValue);
+                  
+                },
+                child: Container(
+                  height: 200,
+                  width: 200,
+                  // ignore: deprecated_member_use
+                  color: Colors.green,
+                  child: sliderValue? Icon(Icons.remove_red_eye):Icon(Icons.generating_tokens),
+                ),
+              );
+            },
+          ),
+          Consumer(
             builder: (context, ref, child) {
               print("container consumer");
-              final sliderValue = ref.watch(sliderProvider);
+              final sliderValue = ref.watch(sliderProvider.select((state)=>state.slider));
               return Container(
                 height: 200,
                 width: 200,
@@ -147,12 +166,14 @@ class HomeScreen extends ConsumerWidget {
           ),
           Consumer(
             builder: (context, ref, child) {
-              final sliderValue = ref.watch(sliderProvider);
+              //final sliderValue = ref.watch(sliderProvider);
+              final sliderValue = ref.watch(sliderProvider.select((state)=>state.slider));
               print("slider consumer");
               return Slider(
                 value: sliderValue,
                 onChanged: (value) {
-                  ref.read(sliderProvider.notifier).state = value;
+                  final appStateProvider=ref.read(sliderProvider.notifier);
+                  appStateProvider.state=appStateProvider.state.copyWith(slider: value);
                 },
               );
             },
