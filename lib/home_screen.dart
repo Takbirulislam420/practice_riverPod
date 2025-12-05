@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 
-final hello1 = Provider<String>((ref) {
-  return "hello provider";
+// Switch must be StateProvider, not Provider.
+final switchButton = StateProvider<bool>((ref) {
+  return false;
 });
 
 final counter = StateProvider<int>((ref) {
@@ -20,27 +21,120 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    final helloRiver = ref.watch(hello1);
-    return Scaffold(
-      appBar: AppBar(title: Text("data")),
-      body: Center(child: Text("consumer: $helloRiver")),
+        return Scaffold(
+      appBar: AppBar(title: const Text("data")),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Counter text
+          Consumer(
+            builder: (context, ref, child) {
+              print("build1 ful");
+              final count = ref.watch(counter);
+              return Center(
+                child: Text("consumer: $count", style: TextStyle(fontSize: 20)),
+              );
+            },
+          ),
+
+          // Switch
+          Consumer(
+            builder: (context, ref, child) {
+              print("build2");
+              final switchState = ref.watch(switchButton);
+              return Center(
+                child: Switch(
+                  value: switchState,
+                  onChanged: (value) {
+                    ref.read(switchButton.notifier).state = value;
+                  },
+                ),
+              );
+            },
+          ),
+
+          // + button
+          IconButton(
+            onPressed: () {
+              ref.read(counter.notifier).state++;
+            },
+            icon: const Icon(Icons.add),
+          ),
+
+          // - button
+          IconButton(
+            onPressed: () {
+              ref.read(counter.notifier).state--;
+            },
+            icon: const Icon(Icons.remove),
+          ),
+        ],
+      ),
     );
   }
 }
 
 
-// Work with RiverPod
- 
+
+
 // class HomeScreen extends ConsumerWidget {
 //   const HomeScreen({super.key});
 
 //   @override
 //   Widget build(BuildContext context, WidgetRef ref) {
-//     final helloRiver=ref.watch(hello1);
-//     final intRiver=ref.watch(hello2);
+//     print("build");
+
 //     return Scaffold(
-//       appBar: AppBar(title: Text("data"),),
-//       body: Center(child: Text("consumer: $intRiver $helloRiver"),),
-//       );
+//       appBar: AppBar(title: const Text("data")),
+//       body: Column(
+//         mainAxisAlignment: MainAxisAlignment.center,
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           // Counter text
+//           Consumer(
+//             builder: (context, ref, child) {
+//               print("build1");
+//               final count = ref.watch(counter);
+//               return Center(
+//                 child: Text("consumer: $count", style: TextStyle(fontSize: 20)),
+//               );
+//             },
+//           ),
+
+//           // Switch
+//           Consumer(
+//             builder: (context, ref, child) {
+//               print("build2");
+//               final switchState = ref.watch(switchButton);
+//               return Center(
+//                 child: Switch(
+//                   value: switchState,
+//                   onChanged: (value) {
+//                     ref.read(switchButton.notifier).state = value;
+//                   },
+//                 ),
+//               );
+//             },
+//           ),
+
+//           // + button
+//           IconButton(
+//             onPressed: () {
+//               ref.read(counter.notifier).state++;
+//             },
+//             icon: const Icon(Icons.add),
+//           ),
+
+//           // - button
+//           IconButton(
+//             onPressed: () {
+//               ref.read(counter.notifier).state--;
+//             },
+//             icon: const Icon(Icons.remove),
+//           ),
+//         ],
+//       ),
+//     );
 //   }
 // }
