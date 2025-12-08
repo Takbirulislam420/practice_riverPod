@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:practice_riverpod/home_screen.dart';
+import 'package:practice_riverpod/local_data/user_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,10 +17,8 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.deepPurple)),
-        home: HomeScreen(),
+        home: UserPage(),
       ),
     );
   }
 }
-
-//after offday
