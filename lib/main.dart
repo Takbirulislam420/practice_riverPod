@@ -15,12 +15,11 @@ class MyApp extends StatelessWidget {
     return ProviderScope(
       child: MaterialApp(
         title: 'Flutter Demo',
-        theme: ThemeData(
-          colorScheme: .fromSeed(seedColor: Colors.deepPurple),
-        ),
+        theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.deepPurple)),
         home: HomeScreen(),
       ),
     );
   }
 }
 
+//after offday
